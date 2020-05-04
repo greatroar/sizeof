@@ -62,6 +62,7 @@ var (
 	flagConst   = flag.Bool("c", false, "show constant values")
 	flagField   = flag.Bool("f", false, "show field offsets")
 	flagPkg     = flag.String("p", "", "look up types in package named by `path`")
+	flagTags    = flag.String("tags", "", "build tags")
 	flagVerbose = flag.Bool("v", false, "print debugging information")
 
 	want []string
@@ -113,9 +114,14 @@ func main() {
 	haveSFiles := lines[2] != "[]"
 	packageName := lines[3]
 
-	// Figure out how to get the asm header file.
 	var tmp *os.File
 	args := []string{"build"}
+
+	if *flagTags != "" {
+		args = append(args, "-tags", *flagTags)
+	}
+
+	// Figure out how to get the asm header file.
 	if haveSFiles {
 		// Go command already writes asmhdr file. Use that one.
 		if *flagVerbose {

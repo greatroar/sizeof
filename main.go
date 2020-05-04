@@ -136,6 +136,7 @@ func main() {
 			log.Fatal(err)
 		}
 		tmp = f
+		defer os.Remove(tmp.Name())
 		args = append(args, "-gcflags", "-asmhdr="+tmp.Name())
 	}
 
@@ -200,7 +201,6 @@ func main() {
 		// Parse go_asm.h file written to f.
 		data, err = ioutil.ReadFile(tmp.Name())
 		tmp.Close()
-		os.Remove(tmp.Name())
 	}
 	if err != nil {
 		log.Fatal(err)
